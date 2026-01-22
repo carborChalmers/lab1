@@ -1,0 +1,1 @@
+// Gör en Super klass med alla gemensamma funktioner (protected borde fungera, annars public)
