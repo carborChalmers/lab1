@@ -11,7 +11,7 @@ public abstract class Car implements Movable {
     private double yCor; // y-coordinate
     private Direction direction; // Direction of the car
 
-    public Car(int nrDoors, Color color, double enginePower, String modelName){
+    protected Car(int nrDoors, Color color, double enginePower, String modelName){
         this.nrDoors = nrDoors;
         this.enginePower = enginePower;
         this.color = color;
