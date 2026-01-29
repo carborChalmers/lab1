@@ -1,18 +1,35 @@
 import java.awt.*;
 
-public class Car{
-    public final static double trimFactor = 1.25;
-    public int nrDoors; // Number of doors on the car
-    public double enginePower; // Engine power of the car
-    public double currentSpeed; // The current speed of the car
-    public Color color; // Color of the car
-    public String modelName; // The car model name
-    
-    
-    
+public abstract class Car implements Movable {
+
+    private int nrDoors; // Number of doors on the car
+    private double enginePower; // Engine power of the car
+    private double currentSpeed; // The current speed of the car
+    private Color color; // Color of the car
+    private String modelName; // The car model name
+    private double xCor; // x-coordinate
+    private double yCor; // y-coordinate
+    private Direction direction; // Direction of the car
+
+    public Car(int nrDoors, Color color, double enginePower, String modelName){
+        this.nrDoors = nrDoors;
+        this.enginePower = enginePower;
+        this.color = color;
+        this.modelName = modelName;
+        this.xCor = 0;
+        this.yCor = 0;
+        this.direction = Direction.north;
+        stopEngine();
+    }
+
+    public enum Direction {
+        north, east, south, west
+    }
+
     public int getNrDoors(){
         return nrDoors;
     }
+
     public double getEnginePower(){
         return enginePower;
     }
@@ -36,26 +53,68 @@ public class Car{
     public void stopEngine(){
 	    currentSpeed = 0;
     }
-    
-    public double speedFactor(){
-        return enginePower * 0.01 * trimFactor;
+
+    protected abstract double speedFactor();
+
+    // Skyddat mot hastighet utanför intervallet [0,enginePower] om man antar
+    // enginePower && speedFactor > 0. För timetravel Car krävs ytterliggare skydd
+    protected void incrementSpeed(double amount){
+    currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower());
     }
 
-    public void incrementSpeed(double amount){
-	    currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount,enginePower);
+    protected void decrementSpeed(double amount){
+    currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount, 0);
     }
 
-    public void decrementSpeed(double amount){
-        currentSpeed = Math.max(getCurrentSpeed() - speedFactor() * amount,0);
-    }
-
-    // TODO fix this method according to lab pm
     public void gas(double amount){
+        if (amount < 0 || amount > 1) {
+            return;
+        }
         incrementSpeed(amount);
     }
 
-    // TODO fix this method according to lab pm
     public void brake(double amount){
+        if (amount < 0 || amount > 1) {
+            return;
+        }
         decrementSpeed(amount);
+    }
+
+    @Override
+    public void turnLeft() {
+        switch (direction) {
+            case north -> direction = Direction.west;
+            case west -> direction = Direction.south;
+            case south -> direction = Direction.east;
+            case east -> direction = Direction.north;
+        }
+    }
+
+    @Override
+    public void turnRight() {
+        switch (direction) {
+            case north -> direction = Direction.east;
+            case east -> direction = Direction.south;
+            case south -> direction = Direction.west;
+            case west -> direction = Direction.north;
+        }
+    }
+
+    @Override
+    public void move() {
+        switch (direction) {
+            case north -> yCor += getCurrentSpeed();
+            case south -> yCor -= getCurrentSpeed();
+            case east -> xCor += getCurrentSpeed();
+            case west -> xCor -= getCurrentSpeed();
+        }
+    }
+
+    public double getX() {
+        return xCor;
+    }
+
+    public double getY() {
+        return yCor;
     }
 }
