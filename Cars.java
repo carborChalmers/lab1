@@ -21,6 +21,11 @@ public abstract class Cars implements Movable {
         this.direction = 0; //0=NORR, 1=ÖST, 2=SYD, 3=VÄST
         stopEngine();
     }
+    
+    // getDirection för att kunna testa direction i CarTest.java
+    public int getDirection(){
+        return direction;
+    }
 
     public int getNrDoors(){
         return nrDoors;
