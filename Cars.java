@@ -52,13 +52,9 @@ public abstract class Cars implements Movable {
 
     protected abstract double speedFactor();
 
-    protected void incrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() + speedFactor() * amount;
-    }
+    protected void incrementSpeed(double amount){}
 
-    protected void decrementSpeed(double amount){
-        currentSpeed = getCurrentSpeed() - speedFactor() * amount;
-    }
+    protected void decrementSpeed(double amount){}
 
     public void gas(double amount){
         if (amount < 0 || amount >1) return;
