@@ -82,7 +82,7 @@ public class CarTest {
         car.startEngine();
         car.gas(0.5);
         car.move();
-        assertEquals(car.getX(), car.getCurrentSpeed());
+        assertEquals(car.getY(), car.getCurrentSpeed());
     }
 
     @Test
