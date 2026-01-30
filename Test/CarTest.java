@@ -61,4 +61,47 @@ public class CarTest {
         car.brake(-2);
         assertEquals(car.getCurrentSpeed(), speedPre);
     }
+
+    @Test
+    void turnLeft_turnsLeft() {
+        Car car = new Volvo240();
+        car.turnLeft();
+        assertEquals(car.getDirection(), Car.Direction.west);
+    }
+
+    @Test
+    void turnRight_turnsRight() {
+        Car car = new Volvo240();
+        car.turnRight();
+        assertEquals(car.getDirection(), Car.Direction.east);
+    }
+
+    @Test
+    void move_movesCarCorrectDistance() {
+        Car car = new Volvo240();
+        car.startEngine();
+        car.gas(0.5);
+        car.move();
+        assertEquals(car.getX(), car.getCurrentSpeed());
+    }
+
+    @Test
+    void speed_neverExceedsEnginePower() {
+        Car car = new Volvo240();
+        car.startEngine();
+        for (int i = 0; i < 100; i++) {
+            car.gas(1);
+        }
+        assertEquals(car.getEnginePower(), car.getCurrentSpeed());
+    }
+
+    @Test
+    void moveWest_decreasesX() {
+        Car car = new Volvo240();
+        car.startEngine();
+        car.turnLeft();
+        car.gas(0.5);
+        car.move();
+        assertTrue(car.getX() < 0);
+    }
 }

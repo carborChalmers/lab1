@@ -2,8 +2,8 @@ import java.awt.*;
 
 public abstract class Car implements Movable {
 
-    private int nrDoors; // Number of doors on the car
-    private double enginePower; // Engine power of the car
+    private final int nrDoors; // Number of doors on the car
+    private final double enginePower; // Engine power of the car
     private double currentSpeed; // The current speed of the car
     private Color color; // Color of the car
     private String modelName; // The car model name
@@ -42,6 +42,10 @@ public abstract class Car implements Movable {
         return color;
     }
 
+    public String getModelName(){
+        return modelName;
+    }
+
     public void setColor(Color clr){
 	    color = clr;
     }
@@ -57,7 +61,7 @@ public abstract class Car implements Movable {
     protected abstract double speedFactor();
 
     // Skyddat mot hastighet utanför intervallet [0,enginePower] om man antar
-    // enginePower && speedFactor > 0. För timetravel Car krävs ytterliggare skydd
+    // enginePower && speedFactor > 0.
     protected void incrementSpeed(double amount){
     currentSpeed = Math.min(getCurrentSpeed() + speedFactor() * amount, getEnginePower());
     }
@@ -116,5 +120,9 @@ public abstract class Car implements Movable {
 
     public double getY() {
         return yCor;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 }
