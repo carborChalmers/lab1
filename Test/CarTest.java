@@ -104,4 +104,14 @@ public class CarTest {
         car.move();
         assertTrue(car.getX() < 0);
     }
+
+    @Test
+    void speed_notBelowZero() {
+        Car car = new Volvo240();
+        car.startEngine();
+        for (int i = 0; i < 100; i++) {
+            car.brake(1);
+        }
+        assertTrue(car.getCurrentSpeed() >= 0);
+    }
 }
