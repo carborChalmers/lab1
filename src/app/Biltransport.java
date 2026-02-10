@@ -38,6 +38,9 @@ public class Biltransport extends Truck {
         bil.setYPos(getY());
         return bil;
     }
+    public int getLoadedCars(){
+        return lastadeBilar.size();
+    }
     @Override
     public void move(){
         super.move();

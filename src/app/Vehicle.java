@@ -67,6 +67,7 @@ public abstract class Vehicle implements Movable {
 
     public void stopEngine(){
 	    ignition = false;
+        currentSpeed = 0;
     }
 
     protected abstract double speedFactor();
