@@ -26,6 +26,12 @@ public abstract class Cars implements Movable {
     public int getDirection(){
         return direction;
     }
+    public double getX(){
+        return x;
+    }
+    public double getY(){
+        return x;
+    }
 
     public int getNrDoors(){
         return nrDoors;

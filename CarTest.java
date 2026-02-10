@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.awt.*;
 
 public class CarTest {
-    
+
     @Test
     void newCars_hasZeroSpeed() {
         Cars car = new Volvo240();
@@ -103,5 +103,23 @@ public class CarTest {
         assertEquals(0,car.getDirection());
         car.turnLeft();
         assertEquals(3, car.getDirection());
+    }
+
+    @Test
+    void turnRight_move() {
+        Cars car = new Volvo240();
+        car.startEngine();
+        car.turnRight();
+        car.move();
+        assertTrue(car.getX() > 0);
+    }
+
+    @Test
+    void turnLeft_move() {
+        Cars car = new Volvo240();
+        car.startEngine();
+        car.turnLeft();
+        car.move();
+        assertTrue(car.getX() < 0);
     }
 }
