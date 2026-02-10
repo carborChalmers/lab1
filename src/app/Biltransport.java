@@ -46,10 +46,5 @@ public class Biltransport extends Truck {
             bil.setYPos(getY());
         }
     }
-  
-
-       
-
-
 }
    
