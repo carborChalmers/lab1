@@ -18,18 +18,15 @@ public class Saab95Test {
         vehicle.gas(0.5);
         assertTrue(turboOffSpeed < vehicle.getCurrentSpeed());
     }
-
     @Test
-    void turboOff_turnsOffTurbo() {
+    void NoMoveWhenTransported() {
         Saab95 vehicle = new Saab95();
+        vehicle.setBeingTransported(true);
         vehicle.startEngine();
-        vehicle.gas(0.5);
-        double turboOffSpeed = vehicle.getCurrentSpeed();
-        vehicle.stopEngine();
-        vehicle.startEngine();
-        vehicle.setTurboOn();
-        vehicle.setTurboOff();
-        vehicle.gas(0.5);
-        assertEquals(turboOffSpeed, vehicle.getCurrentSpeed());
+        vehicle.gas(0.5);       
+        assertEquals(0,vehicle.getX());
+        assertEquals(0,vehicle.getY());
+
     }
-}
+    
+    }
