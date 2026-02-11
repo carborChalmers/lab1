@@ -10,30 +10,40 @@ public class Biltransport extends Truck {
         
     }
     public void lastaBil(Vehicle Bil){
-        if(!isRampDown()){
-            return;
+        if(Bil instanceof Transportable){
+            Transportable transportableBil = (Transportable) Bil;
+            if(transportableBil.isBeingTransported()){
+                return;
+            }
+            if(!isRampDown()){
+                return;
+            }
+            if(lastadeBilar.size()>= MaxLast){
+                return;
+            }   
+            if(Bil instanceof Biltransport){
+                return;
+            }
+            if(Bil.getWegiht()>4500){
+                return;
+            }
+            if(((getY()-5)<Bil.getY()&&Bil.getY()<(getY()+5))&&((getX()-5)<Bil.getX()&&Bil.getX()<(getX()+5))){
+                Bil.stopEngine();
+                Bil.setXPos(getX());
+                Bil.setYPos(getY());
+                transportableBil.setBeingTransported(true);
+                lastadeBilar.push(Bil);
+            }
         }
-        if(lastadeBilar.size()>= MaxLast){
-            return;
-        }   
-        if(Bil instanceof Biltransport){
-            return;
-        }
-        if(Bil.getWegiht()>4500){
-            return;
-        }
-         if(((getY()-5)<Bil.getY()&&Bil.getY()<(getY()+5))&&((getX()-5)<Bil.getX()&&Bil.getX()<(getX()+5))){
-            Bil.stopEngine();
-            Bil.setXPos(getX());
-            Bil.setYPos(getY());
-            lastadeBilar.push(Bil);
-         }
+       
+      
     }
     public Vehicle lossaBil(){
         if(!isRampDown()||lastadeBilar.isEmpty()){
             return null;
         }
         Vehicle bil=lastadeBilar.pop();
+        ((Transportable)bil).setBeingTransported(false);;
         bil.setXPos(getX());
         bil.setYPos(getY());
         return bil;
