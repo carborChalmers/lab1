@@ -118,6 +118,9 @@ public abstract class Vehicle implements Movable {
 
     @Override
     public void move() {
+        if(this instanceof Transportable && ((Transportable)this).isBeingTransported()){
+            return;
+        }
         switch (direction) {
             case north -> yCor += getCurrentSpeed();
             case south -> yCor -= getCurrentSpeed();
