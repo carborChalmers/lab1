@@ -14,14 +14,14 @@ public class DrawPanel extends JPanel{
     BufferedImage volvoImage;
     BufferedImage saabImage;
     BufferedImage scaniaImage;
-    boolean showVolvo = true;
+    public boolean showVolvo = true;
     // To keep track of a single car's position
-    Point volvoPoint = new Point(0,0);
-    Point saabPoint = new Point(0,100);
-    Point scaniaPoint = new Point(0,200);
+    private Point volvoPoint = new Point(0,0);
+    private Point saabPoint = new Point(0,100);
+    private Point scaniaPoint = new Point(0,200);
 
     BufferedImage volvoWorkshopImage;
-    Point volvoWorkshopPoint = new Point(300,300);
+    public Point volvoWorkshopPoint = new Point(300,300);
 
     // TODO: Make this general for all cars
     void moveit(int index,int x, int y){

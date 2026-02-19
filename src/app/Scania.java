@@ -15,13 +15,13 @@ public class Scania extends Truck {
             flakVinkel = Math.max(flakVinkel - vinkel, 0);
             lowerRamp();
     }}
-        public void raiseRamp(double vinkel){
-          if(getCurrentSpeed()==0){
-            flakVinkel = Math.min(flakVinkel + vinkel, 70);
+    public void raiseRamp(double vinkel){
+        if(getCurrentSpeed()==0){
+        flakVinkel = Math.min(flakVinkel + vinkel, 70);
 
-            if(getFlakVinkel()==0){
-                raiseRamp();
-            }
+        if(getFlakVinkel()==0){
+            raiseRamp();
+        }
     }
 
 
