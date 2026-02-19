@@ -21,7 +21,7 @@ public abstract class Vehicle implements Movable {
         this.weight=Weight;
         this.xCor = 0;
         this.yCor = 0;
-        this.direction = Direction.north;
+        this.direction = Direction.east;
         stopEngine();
     }
 

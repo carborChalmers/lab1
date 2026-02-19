@@ -52,8 +52,58 @@ public class CarController {
     * */
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
+            int panelWidth = frame.drawPanel.getWidth();
+            int panelHeight = frame.drawPanel.getHeight();
+            int carWidth = 100;
+            int carHeight = 60;
+            int workshopX = frame.drawPanel.volvoWorkshopPoint.x;
+            int workshopY = frame.drawPanel.volvoWorkshopPoint.y;
+            int workshopWidth = frame.drawPanel.volvoWorkshopImage.getWidth();
+            int workshopHeight = frame.drawPanel.volvoWorkshopImage.getHeight(); 
             for (int i = 0; i<cars.size();i++) {
                 Vehicle car = cars.get(i);
+                car.move();
+
+                if (car.getX() > panelWidth -carWidth ){
+                    car.stopEngine();
+                    car.setXPos(panelWidth-carWidth);
+                    car.turnLeft();
+                    car.turnLeft(); // två vänster = 180 grader, dvs man stannar vid väggen och kör åt andra hållet
+                    car.startEngine();
+                }
+                if (car.getX() <0){
+                    car.stopEngine();
+                    car.setXPos(0);
+                    car.turnLeft();
+                    car.turnLeft();
+                    car.startEngine();
+                }
+                if(car.getY() > panelHeight - carHeight){
+                    car.stopEngine();
+                    car.setYPos(panelHeight-carHeight);
+                    car.turnLeft();
+                    car.turnLeft();
+                    car.startEngine();
+                }
+                if (car.getY() <0){
+                    car.stopEngine();
+                    car.setYPos(0);
+                    car.turnLeft();
+                    car.turnLeft();
+                    car.startEngine();
+                }
+                if (car instanceof Volvo240){
+                    double carX = car.getX();
+                    double carY = car.getY();
+                    boolean xCollision = carX + carWidth >= workshopX && carX <= workshopX + workshopWidth;
+                    boolean yCollision = carY + carHeight >= workshopY && carY<=workshopY + workshopHeight;
+                    if (xCollision && yCollision){
+                        car.stopEngine();
+                        volvoWorkshop.storeVehicle((Volvo240) car);
+                        frame.drawPanel.showVolvo = false;
+                        continue;
+                    }
+                }
                 int x = (int) Math.round(car.getX());
                 int y = (int) Math.round(car.getY());
                 frame.drawPanel.moveit(i,x, y);
@@ -97,5 +147,15 @@ public class CarController {
     }
     void lowerBed() {
         scania.lowerRamp();
+    }
+    void turnLeft(){
+        for (Vehicle car: cars){
+            car.turnLeft();
+        }
+    }
+    void turnRight(){
+        for (Vehicle car: cars){
+            car.turnRight();
+        }
     }
 }
