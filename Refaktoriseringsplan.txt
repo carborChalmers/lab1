@@ -1,0 +1,15 @@
+Refaktoriseringsplan
+- Dela upp CarController, så en del sköter kollision, en annan ritandet
+- Draw fixar ritning av komponenter
+- CarController fixar inputs 
+- Collision sköter kollision
+- CarView ritar upp knappar och panel
+- Ta bort hårdkodningar i Draw (bryter just nu mot OCP) och ta bort kopplingar till subklasser av vehicle, låt den bara rita ut den lista den får (leder till low coupling och law of demeter/ principle of least knowledge) 
+- skapa interface Transporter (som biltransport och truck sedan implementerar) så att andra transporters (tex utan ramp) kan användas. Samt dela upp biltransports logik flera klasser (den gör för mycket olika just nu)
+- Ta bort instanceof, så det blir low coupling och DIP (eftersom de inte beror på konkreta implementationer)
+- Gör kopplingar mer abstrakta om möjligt, för att undvika high coupling i onödan
+- Dela CarController i sina respektive Controller och Main delar.
+- Städa och lägg till fler interfaces för fordon(t.ex. HasEngine och HasTurbo) för att bättre följa OCP.
+- Man kan jobba parallellt, eftersom ”vehicle-delen” och ”UI-delen” har low coupling, därmed kan man jobba utan att störa den andra. Det är 
+-Dela Biltransports ansvarsområden i olika klasser som t.ex. SyncPositions för att bättre följa SRP (då biltransport har för många ansvarsområde just nu) och OCP. 
+enklare att jobba parallellt om man kommer överens om hur de övergripande delarna kommunicerar med varandra
