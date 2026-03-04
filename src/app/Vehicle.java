@@ -1,7 +1,7 @@
 package app;
 import java.awt.*;
 
-public abstract class Vehicle implements Movable {
+public abstract class Vehicle implements Movable,HasEngine {
 
     private int nrDoors; // Number of doors on the car
     private double enginePower; // Engine power of the car
@@ -115,12 +115,13 @@ public abstract class Vehicle implements Movable {
             case west -> direction = Direction.north;
         }
     }
+    protected boolean canMove(){
+        return true;
+    }
 
     @Override
     public void move() {
-        if(this instanceof Transportable && ((Transportable)this).isBeingTransported()){
-            return;
-        }
+        if(!canMove()) return;
         switch (direction) {
             case north -> yCor += getCurrentSpeed();
             case south -> yCor -= getCurrentSpeed();

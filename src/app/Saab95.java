@@ -1,7 +1,7 @@
 package app;
 import java.awt.*;
 
-public class Saab95 extends Vehicle implements Transportable{
+public class Saab95 extends Vehicle implements Transportable,HasTurbo{
 
     private boolean turboOn;
     private boolean BeingTransported;
@@ -35,5 +35,9 @@ public class Saab95 extends Vehicle implements Transportable{
     @Override
     public void setBeingTransported(boolean transported){
         this.BeingTransported=transported;
+    }
+    @Override
+    protected boolean canMove(){
+        return !BeingTransported;
     }
 }
