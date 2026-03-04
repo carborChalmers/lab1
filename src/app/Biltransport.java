@@ -1,63 +1,64 @@
 package app;
 import java.awt.*;
 import java.util.*;
-public class Biltransport extends Truck {
-    private Stack<Vehicle> lastadeBilar;
-    private static final int MaxLast=6;
+public class Biltransport extends Vehicle implements Transporter{
+    private Stack<Vehicle> loadedVehicles;
+    private static final int MAX_LOAD=6;
+    private static final double MAX_WEIGHT = 4500;
+    private boolean rampDown;
     public Biltransport(){
         super(2, Color.GREEN, 500, "Biltransport",10000);
-        lastadeBilar=new Stack<>();
-        
+        this.loadedVehicles = new Stack<>();
+        this.rampDown = false;
     }
-    public void lastaBil(Vehicle Bil){
-        if(Bil instanceof Transportable){
-            Transportable transportableBil = (Transportable) Bil;
-            if(transportableBil.isBeingTransported()){
-                return;
-            }
-            if(!isRampDown()){
-                return;
-            }
-            if(lastadeBilar.size()>= MaxLast){
-                return;
-            }   
-            if(Bil instanceof Biltransport){
-                return;
-            }
-            if(Bil.getWegiht()>4500){
-                return;
-            }
-            if(((getY()-5)<Bil.getY()&&Bil.getY()<(getY()+5))&&((getX()-5)<Bil.getX()&&Bil.getX()<(getX()+5))){
-                Bil.stopEngine();
-                Bil.setXPos(getX());
-                Bil.setYPos(getY());
-                transportableBil.setBeingTransported(true);
-                lastadeBilar.push(Bil);
-            }
+    public void lowerRamp(){
+        if(getCurrentSpeed() == 0){
+            rampDown = true;
         }
-       
-      
     }
-    public Vehicle lossaBil(){
-        if(!isRampDown()||lastadeBilar.isEmpty()){
+    public void raiseRamp(){
+        rampDown = false;
+    }
+    public boolean isRampDown(){
+        return rampDown;
+    }
+    @Override
+    public void load(Vehicle vehicle){
+        if(!(vehicle instanceof Transportable transportable)) return;
+        if (!isRampDown()) return;
+        if(loadedVehicles.size()>=MAX_LOAD) return;
+        if(vehicle.getWegiht() > MAX_WEIGHT) return;
+        if (transportable.isBeingTransported()) return;
+        if(isNearby(vehicle)){
+            vehicle.stopEngine();
+            transportable.setBeingTransported(true);
+            loadedVehicles.push(vehicle);
+        }
+    }
+    @Override
+    public Vehicle unload(){
+        if(!isRampDown()||loadedVehicles.isEmpty()){
             return null;
         }
-        Vehicle bil=lastadeBilar.pop();
-        ((Transportable)bil).setBeingTransported(false);;
-        bil.setXPos(getX());
-        bil.setYPos(getY());
+        Vehicle bil=loadedVehicles.pop();
+        ((Transportable)bil).setBeingTransported(false);
         return bil;
     }
-    public int getLoadedCars(){
-        return lastadeBilar.size();
+    private boolean isNearby(Vehicle v){
+        return Math.abs(getX() - v.getX()) < 5 && Math.abs(getY()-v.getY())<5 ;
+    }
+    @Override 
+    protected double speedFactor(){
+        return getEnginePower()*0.01;
+    }
+    @Override
+    protected boolean canMove(){
+        return !rampDown;
     }
     @Override
     public void move(){
         super.move();
-        for (Vehicle bil : lastadeBilar){
-            bil.setXPos(getX());
-            bil.setYPos(getY());
-        }
+        SyncPositions.sync(this,loadedVehicles);
     }
 }
    
