@@ -18,144 +18,103 @@ public class CarController {
     private final int delay = 50;
     // The timer is started with a listener (see below) that executes the statements
     // each step between delays.
-    private Timer timer = new Timer(delay, new TimerListener());
+    private Timer timer;
+    private CarSimulation simulation;
 
     // The frame that represents this instance View of the MVC pattern
-    CarView frame;
+    private CarView view;
     // A list of cars, modify if needed
-    ArrayList<Vehicle> cars = new ArrayList<>();
-    private Volvo240 volvo = new Volvo240();
-    private Saab95 saab = new Saab95();
-    private Scania scania = new Scania();
-    private Workshop<Volvo240> volvoWorkshop = new Workshop<>(5);
     //methods:
 
-    public static void main(String[] args) {
-        // Instance of this class
-        CarController cc = new CarController();
-        // cc.cars.add(new Volvo240());
-        // Start a new view and send a reference of self
-        cc.frame = new CarView("CarSim 1.0", cc);
-        // Start the timer
-        cc.timer.start();
-    }
-    public CarController(){
-        cars.add(volvo);
-        cars.add(saab);
-        cars.add(scania);
-        saab.setYPos(100);
-        scania.setYPos(200);
+    public CarController(CarSimulation simulation){
+        this.simulation = simulation;
+        this.timer = new Timer(delay, new TimerListener());
     }
 
     /* Each step the TimerListener moves all the cars in the list and tells the
     * view to update its images. Change this method to your needs.
     * */
-    private class TimerListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            int panelWidth = frame.drawPanel.getWidth();
-            int panelHeight = frame.drawPanel.getHeight();
-            int carWidth = 100;
-            int carHeight = 60;
-            int workshopX = frame.drawPanel.volvoWorkshopPoint.x;
-            int workshopY = frame.drawPanel.volvoWorkshopPoint.y;
-            int workshopWidth = frame.drawPanel.volvoWorkshopImage.getWidth();
-            int workshopHeight = frame.drawPanel.volvoWorkshopImage.getHeight(); 
-            for (int i = 0; i<cars.size();i++) {
-                Vehicle car = cars.get(i);
-                car.move();
+    public void setView(CarView view){
+        this.view = view;
+    } 
+    public void start(){
+        timer.start();
+    }
 
-                if (car.getX() > panelWidth -carWidth ){
-                    car.stopEngine();
-                    car.setXPos(panelWidth-carWidth);
-                    car.turnLeft();
-                    car.turnLeft(); // två vänster = 180 grader, dvs man stannar vid väggen och kör åt andra hållet
-                    car.startEngine();
-                }
-                if (car.getX() <0){
-                    car.stopEngine();
-                    car.setXPos(0);
-                    car.turnLeft();
-                    car.turnLeft();
-                    car.startEngine();
-                }
-                if(car.getY() > panelHeight - carHeight){
-                    car.stopEngine();
-                    car.setYPos(panelHeight-carHeight);
-                    car.turnLeft();
-                    car.turnLeft();
-                    car.startEngine();
-                }
-                if (car.getY() <0){
-                    car.stopEngine();
-                    car.setYPos(0);
-                    car.turnLeft();
-                    car.turnLeft();
-                    car.startEngine();
-                }
-                if (car instanceof Volvo240){
-                    double carX = car.getX();
-                    double carY = car.getY();
-                    boolean xCollision = carX + carWidth >= workshopX && carX <= workshopX + workshopWidth;
-                    boolean yCollision = carY + carHeight >= workshopY && carY<=workshopY + workshopHeight;
-                    if (xCollision && yCollision){
-                        car.stopEngine();
-                        volvoWorkshop.storeVehicle((Volvo240) car);
-                        frame.drawPanel.showVolvo = false;
-                        continue;
-                    }
-                }
-                int x = (int) Math.round(car.getX());
-                int y = (int) Math.round(car.getY());
-                frame.drawPanel.moveit(i,x, y);
-                // repaint() calls the paintComponent method of the panel
+
+    private class TimerListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e){
+            simulation.moveIt();
+            int width = view.getDrawPanel().getWidth();
+            int height = view.getDrawPanel().getHeight();
+            for (Vehicle v: new ArrayList<>(simulation.getVehicles())){
+                Collision.wallCollide(v, width, height);
+                Collision.workshopCollide(v,simulation.getWorkshop(),simulation);
             }
-            frame.drawPanel.repaint();
+            view.update(simulation.getVehicles(), simulation.getWorkshop());
         }
     }
 
     // Calls the gas method for each car once
     void gas(int amount) {
         double gas = ((double) amount) / 100;
-        for (Vehicle car : cars) {
-            car.gas(gas);
+        for (Vehicle v : simulation.getVehicles()) {
+            v.gas(gas);
         }
     }
     void brake(int amount) {
         double brake = ((double) amount) / 100;
-        for (Vehicle car : cars) {
-            car.brake(brake);
+        for (Vehicle v : simulation.getVehicles()) {
+            v.brake(brake);
         }
     }
     void startAllCars() {
-        for (Vehicle car : cars) {
-            car.startEngine();
+        for (Vehicle v : simulation.getVehicles()) {
+            v.startEngine();
         }
     }
     void stopAllCars() {
-        for (Vehicle car : cars) {
-            car.stopEngine();
+        for (Vehicle v : simulation.getVehicles()) {
+            v.stopEngine();
         }
     }
     void turboOn() {
-        saab.setTurboOn();
+        for (Vehicle v: simulation.getVehicles()){
+            if(v instanceof HasTurbo turbo){
+                turbo.setTurboOn();
+            }
+        }
     }
     void turboOff() {
-        saab.setTurboOff();
+        for (Vehicle v: simulation.getVehicles()){
+            if(v instanceof HasTurbo turbo){
+                turbo.setTurboOff();
+            }
+        }
     }
     void liftBed() {
-        scania.raiseRamp();
+        for (Vehicle v: simulation.getVehicles()){
+            if(v instanceof HasBed bed){
+                bed.raiseRamp(10);
+            }
+        }
     }
     void lowerBed() {
-        scania.lowerRamp();
+        for (Vehicle v: simulation.getVehicles()){
+            if(v instanceof HasBed bed){
+                bed.lowerRamp(10);
+            }
+        }
     }
     void turnLeft(){
-        for (Vehicle car: cars){
-            car.turnLeft();
+        for (Vehicle v : simulation.getVehicles()){
+            v.turnLeft();
         }
     }
     void turnRight(){
-        for (Vehicle car: cars){
-            car.turnRight();
+        for (Vehicle v : simulation.getVehicles()){
+            v.turnRight();
         }
     }
 }

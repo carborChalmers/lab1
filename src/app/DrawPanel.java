@@ -5,31 +5,22 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.util.List;
 
 // This panel represents the animated part of the view with the car images.
 
 public class DrawPanel extends JPanel{
 
     // Just a single image, TODO: Generalize
-    BufferedImage volvoImage;
-    BufferedImage saabImage;
-    BufferedImage scaniaImage;
+    private BufferedImage volvoImage;
+    private BufferedImage saabImage;
+    private BufferedImage scaniaImage;
     public boolean showVolvo = true;
     // To keep track of a single car's position
-    private Point volvoPoint = new Point(0,0);
-    private Point saabPoint = new Point(0,100);
-    private Point scaniaPoint = new Point(0,200);
+    private List<Vehicle> vehicles;
+    private Workshop<Volvo240> workshop;
+    private BufferedImage workshopImage;
 
-    BufferedImage volvoWorkshopImage;
-    public Point volvoWorkshopPoint = new Point(300,300);
-
-    // TODO: Make this general for all cars
-    void moveit(int index,int x, int y){
-        if (index==0){volvoPoint.setLocation(x,y);}
-        else if(index == 1) {saabPoint.setLocation(x,y);}
-        else if (index ==2) {scaniaPoint.setLocation(x,y);}
-        repaint();
-    }
 
     // Initializes the panel and reads the images
     public DrawPanel(int x, int y) {
@@ -47,12 +38,17 @@ public class DrawPanel extends JPanel{
             volvoImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Volvo240.jpg"));
             saabImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Saab95.jpg"));
             scaniaImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/Scania.jpg"));
-            volvoWorkshopImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg"));
+            workshopImage = ImageIO.read(DrawPanel.class.getResourceAsStream("pics/VolvoBrand.jpg"));
         } catch (IOException ex)
         {
             ex.printStackTrace();
         }
 
+    }
+    public void update(List<Vehicle> vehicles, Workshop<Volvo240> workshop){
+        this.vehicles = vehicles;
+        this.workshop = workshop;
+        repaint();
     }
 
     // This method is called each time the panel updates/refreshes/repaints itself
@@ -60,11 +56,20 @@ public class DrawPanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (showVolvo){
-            g.drawImage(volvoImage, volvoPoint.x, volvoPoint.y, null); // see javadoc for more info on the parameters
+        if(vehicles == null) return;
+        if(workshop != null){
+            g.drawImage(workshopImage, 300, 300, null);
         }
-        g.drawImage(volvoWorkshopImage, volvoWorkshopPoint.x, volvoWorkshopPoint.y, null);
-        g.drawImage(saabImage, saabPoint.x, saabPoint.y, null); // see javadoc for more info on the parameters
-        g.drawImage(scaniaImage, scaniaPoint.x, scaniaPoint.y, null);
+        for (Vehicle v: vehicles){
+            if(v instanceof Volvo240){
+                g.drawImage(volvoImage,(int)v.getX(),(int)v.getY(),null);
+            }
+            if(v instanceof Saab95){
+                g.drawImage(saabImage,(int)v.getX(),(int)v.getY(),null);
+            }
+            if(v instanceof Scania){
+                g.drawImage(scaniaImage,(int)v.getX(),(int)v.getY(),null);
+            }
+        }
     }
 }

@@ -47,6 +47,12 @@ public class CarView extends JFrame{
         this.carC = cc;
         initComponents(framename);
     }
+    public void update(java.util.List<Vehicle> vehicles, Workshop<Volvo240> workshop){
+        drawPanel.update(vehicles, workshop);
+    }
+    public DrawPanel getDrawPanel(){
+        return drawPanel;
+    }
 
     // Sets everything in place and fits everything
     // TODO: Take a good look and make sure you understand how these methods and components work
