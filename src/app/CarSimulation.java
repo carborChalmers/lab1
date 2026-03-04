@@ -11,7 +11,7 @@ public class CarSimulation{
 
     public CarSimulation(){
         vehicles = new ArrayList<>();
-        workshop = new Workshop<>(5, 600, 20,150,100);
+        workshop = new Workshop<>(5, 300, 300,150,100);
         vehicles.add(new Volvo240());
         vehicles.add(new Saab95());
         vehicles.add(new Scania());
