@@ -6,8 +6,6 @@ import java.util.List;
 public class CarSimulation{
     private List<Vehicle> vehicles;
     private Workshop<Volvo240> workshop;
-    private final int width = 800;
-    private final int height = 600;
 
     public CarSimulation(){
         vehicles = new ArrayList<>();

@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 
 
-public class CarController {
+public class CarController implements ViewEvents{
     // member fields:
 
     // The delay (ms) corresponds to 20 updates a sec (hz)
@@ -57,62 +57,63 @@ public class CarController {
     }
 
     // Calls the gas method for each car once
-    void gas(int amount) {
+    @Override
+    public void gas(int amount) {
         double gas = ((double) amount) / 100;
         for (Vehicle v : simulation.getVehicles()) {
             v.gas(gas);
         }
     }
-    void brake(int amount) {
+    public void brake(int amount) {
         double brake = ((double) amount) / 100;
         for (Vehicle v : simulation.getVehicles()) {
             v.brake(brake);
         }
     }
-    void startAllCars() {
+    public void startAllCars() {
         for (Vehicle v : simulation.getVehicles()) {
             v.startEngine();
         }
     }
-    void stopAllCars() {
+    public void stopAllCars() {
         for (Vehicle v : simulation.getVehicles()) {
             v.stopEngine();
         }
     }
-    void turboOn() {
+    public void turboOn() {
         for (Vehicle v: simulation.getVehicles()){
             if(v instanceof HasTurbo turbo){
                 turbo.setTurboOn();
             }
         }
     }
-    void turboOff() {
+    public void turboOff() {
         for (Vehicle v: simulation.getVehicles()){
             if(v instanceof HasTurbo turbo){
                 turbo.setTurboOff();
             }
         }
     }
-    void liftBed() {
+    public void liftBed() {
         for (Vehicle v: simulation.getVehicles()){
             if(v instanceof HasBed bed){
                 bed.raiseRamp(10);
             }
         }
     }
-    void lowerBed() {
+    public void lowerBed() {
         for (Vehicle v: simulation.getVehicles()){
             if(v instanceof HasBed bed){
                 bed.lowerRamp(10);
             }
         }
     }
-    void turnLeft(){
+    public void turnLeft(){
         for (Vehicle v : simulation.getVehicles()){
             v.turnLeft();
         }
     }
-    void turnRight(){
+    public void turnRight(){
         for (Vehicle v : simulation.getVehicles()){
             v.turnRight();
         }
