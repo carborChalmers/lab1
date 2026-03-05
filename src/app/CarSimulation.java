@@ -10,12 +10,10 @@ public class CarSimulation{
     public CarSimulation(){
         vehicles = new ArrayList<>();
         workshop = new Workshop<>(5, 300, 300,150,100);
-        vehicles.add(new Volvo240());
-        vehicles.add(new Saab95());
-        vehicles.add(new Scania());
+        vehicles.add(VehicleFactory.CreateVehicle(VehicleFactory.VehicleType.Volvo240, 0, 0));
+        vehicles.add(VehicleFactory.CreateVehicle(VehicleFactory.VehicleType.Saab95, 0, 100));
+        vehicles.add(VehicleFactory.CreateVehicle(VehicleFactory.VehicleType.Scania, 0, 200));
 
-        vehicles.get(1).setYPos(100);
-        vehicles.get(2).setYPos(200);
     }
     public void moveIt(){
         for(Vehicle v: vehicles){
