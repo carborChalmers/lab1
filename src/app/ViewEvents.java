@@ -11,4 +11,6 @@ public interface ViewEvents {
     void lowerBed();
     void turnLeft();
     void turnRight();
+    void addCar();
+    void removeCar();
 }

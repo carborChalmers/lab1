@@ -2,8 +2,11 @@ package app;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.random.*;
 /*
 * This class represents the Controller part in the MVC pattern.
 * It's responsibilities is to listen to the View and responds in a appropriate manner by
@@ -117,5 +120,15 @@ public class CarController implements ViewEvents{
         for (Vehicle v : simulation.getVehicles()){
             v.turnRight();
         }
+    }
+    public void addCar(){
+        if (simulation.getVehicles().size() >= 10){return;}
+        VehicleFactory.VehicleType[] types = VehicleFactory.VehicleType.values();
+        Vehicle v = VehicleFactory.CreateVehicle(types[new Random().nextInt(types.length)], 0, simulation.getVehicles().size()*100);
+        simulation.addCar(v);
+    }
+    public void removeCar(){
+        if(simulation.getVehicles().isEmpty()){return;}
+        simulation.removeVehicle(simulation.getVehicles().getLast());
     }
 }

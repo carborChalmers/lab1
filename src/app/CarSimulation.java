@@ -3,6 +3,8 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+import app.VehicleFactory.VehicleType;
+
 public class CarSimulation{
     private List<Vehicle> vehicles;
     private Workshop<Volvo240> workshop;
@@ -13,7 +15,9 @@ public class CarSimulation{
         vehicles.add(VehicleFactory.CreateVehicle(VehicleFactory.VehicleType.Volvo240, 0, 0));
         vehicles.add(VehicleFactory.CreateVehicle(VehicleFactory.VehicleType.Saab95, 0, 100));
         vehicles.add(VehicleFactory.CreateVehicle(VehicleFactory.VehicleType.Scania, 0, 200));
-
+    }
+    public void addCar(Vehicle v){
+        vehicles.add(v);
     }
     public void moveIt(){
         for(Vehicle v: vehicles){
